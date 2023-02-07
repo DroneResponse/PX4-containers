@@ -2,7 +2,7 @@
 # PX4 base development environment
 #
 
-FROM ubuntu:20.04
+FROM nvcr.io/nvidia/cudagl:11.4.2-devel-ubuntu20.04
 LABEL maintainer="Daniel Agar <daniel@agar.ca>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -65,10 +65,6 @@ RUN python3 -m pip install --upgrade pip wheel setuptools
 RUN python3 -m pip install argparse argcomplete coverage cerberus empy jinja2 kconfiglib \
 		matplotlib==3.0.* numpy nunavut>=1.1.0 packaging pkgconfig pyros-genmsg pyulog \
 		pyyaml requests serial six toml psutil pyulog wheel jsonschema pynacl
-
-# manual ccache setup
-RUN ln -s /usr/bin/ccache /usr/lib/ccache/cc \
-	&& ln -s /usr/bin/ccache /usr/lib/ccache/c++
 
 # astyle v3.1
 RUN wget -q https://downloads.sourceforge.net/project/astyle/astyle/astyle%203.1/astyle_3.1_linux.tar.gz -O /tmp/astyle.tar.gz \

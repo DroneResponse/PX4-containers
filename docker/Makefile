@@ -71,5 +71,8 @@ px4-dev-simulation-bionic: px4-dev-base-bionic
 px4-dev-simulation-focal: px4-dev-base-focal
 	docker build -t px4io/px4-dev-simulation-focal . -f Dockerfile_simulation-focal
 
+px4-dev-simulation-gzweb: px4-dev-simulation-focal
+	docker build -t px4io/px4-dev-simulation-gzweb . -f Dockerfile_simulation-gzweb
+
 px4-docs:
 	docker build -t px4io/px4-dev-docs . -f Dockerfile_docs

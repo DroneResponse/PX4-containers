@@ -1,0 +1,50 @@
+#
+# PX4 Gazebo 11 plus gzweb development environment in Ubuntu 20.04 Focal
+#
+FROM px4io/px4-dev-simulation-focal
+LABEL maintainer="Michael Murphy"
+
+RUN apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
+		python \
+		libjansson-dev \
+		libboost-dev \
+		imagemagick \
+		libtinyxml-dev \
+		mercurial \
+		cmake \
+		build-essential \
+	&& apt-get -y autoremove \
+	&& apt-get clean autoclean \
+	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+#
+# Install NODE JS 11
+WORKDIR /tmp
+# This is the name of the node js archive (without hte extention) and the name
+# of the "nodejs home" directory
+# For X86:
+ARG nodejs=node-v11.15.0-linux-x64
+# For ARM:
+# ARG nodejs=node-v11.15.0-linux-arm64
+
+RUN wget "https://nodejs.org/download/release/v11.15.0/${nodejs}.tar.xz" \
+	&& tar -C /usr/local -xf "${nodejs}.tar.xz" \
+	&& rm "/tmp/${nodejs}.tar.xz"
+ENV PATH /usr/local/${nodejs}/bin:$PATH
+
+#
+
+
+#
+# Instal gzweb
+WORKDIR /usr/local
+RUN git clone --branch gzweb_1.4.1 https://github.com/osrf/gzweb
+
+WORKDIR /tmp
+COPY scripts/setup_gzweb.sh .
+RUN ./setup_gzweb.sh
+
+COPY scripts/start_simulation.sh /bin/start_simulation.sh
+
+WORKDIR /
